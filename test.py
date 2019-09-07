@@ -33,14 +33,13 @@ class Handler:
         if event.msg.sender.username != bot.username:
             channel = event.msg.channel
             msg = event.msg.content.text.body
-                
-            #help function    
+
             if "!helpmemydude" in msg:
-                await bot.chat.send(channel, "*Here are some commands you can use:* \n `!sendmeme` to send a meme \n " + 
+                await bot.chat.send(channel, "*Here are some commands you can use:* \n `!sendmeme` to send a meme \n " +
                 "`!quizme` to quiz yourself about security and privacy \n `!ask` to ask a question about security \n " +
                 "`"
                 "`!virusgame` to learn more about viruses and cybersecurity :slightly_smiling_face: ")
-            
+
             #meme function
             elif "!sendmeme" in msg:
                 keyword = msg.split(" ")
@@ -112,6 +111,23 @@ class Handler:
                         if answered:
                             await bot.chat.send(channel, "*Information on " + keyword + ":* " + text)
                             break
+
+
+
+            elif '!findme' in msg:
+                entered = False
+                input("What would you like to find about yourself? \nPut in a few key words with spaces in between and the company at the end")
+
+                words = event.msg.content.text.body.split(' ')
+                # TODO: Only process following code after the user sends a message
+                company = words [-1]
+                keywords = words[:-1]
+
+                if !company.lower() in companies:
+                    await bot.chat.send(channel, "try again")
+                else:
+                    scrape(company)
+
 
 
 
