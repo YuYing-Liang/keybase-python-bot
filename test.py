@@ -81,7 +81,7 @@ listen_options = {
 }
 
 bot = Bot(
-    username="mydude", paperkey="maximum explain energy divert whip reunion census hospital deliver symbol laugh mosquito disorder", handler=Handler()
+    username="mydude", paperkey=os.environ["KEYBASE_PAPERKEY"], handler=Handler()
 )
 
 asyncio.run(bot.start(listen_options))
