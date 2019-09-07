@@ -1,7 +1,7 @@
 from itertools import combinations
 from urllib.parse import urlencode, urlparse, parse_qs
 
-from lxml.html import fromstring
+#from lxml.html import fromstring
 from requests import *
 
 def gSearch(SearchTerms, noComb):
