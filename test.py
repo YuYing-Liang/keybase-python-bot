@@ -14,6 +14,7 @@ import logging
 import os
 import json
 import random
+from bs4 import BeautifulSoup
 from quiz_data import *
 
 from pykeybasebot import Bot
@@ -33,11 +34,14 @@ class Handler:
             channel = event.msg.channel
             msg = event.msg.content.text.body
                 
+            #help function    
             if "!helpmemydude" in msg:
                 await bot.chat.send(channel, "*Here are some commands you can use:* \n `!sendmeme` to send a meme \n " + 
                 "`!quizme` to quiz yourself about security and privacy \n `!ask` to ask a question about security \n " +
                 "`"
                 "`!virusgame` to learn more about viruses and cybersecurity :slightly_smiling_face: ")
+            
+            #meme function
             elif "!sendmeme" in msg:
                 keyword = msg.split(" ")
                 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
@@ -56,6 +60,8 @@ class Handler:
                             f.write(r.content)
                         await bot.chat.attach(channel, temp_pic, "meme")
                         os.remove(temp_pic)
+
+            #quiz function
             elif msg == "!quizme":
                 quizQCount = 1
                 isQuiz = True
@@ -69,6 +75,44 @@ class Handler:
                     quizQuestions[randint2] = temp
 
                 print(questions[quizQCount])
+
+            #answers security questions
+            elif "!ask" in msg:
+                answered = False
+                text = ""
+                numParas = 3
+                paraCount = 0
+                words = msg.split(" ")
+                if words[0] == "!ask":
+                    search = msg[5:]
+                    print(search)
+                    r = requests.get("https://www.priv.gc.ca/en/search/?t={}&Page=1".format(search))
+                    c = r.content
+                    soup = BeautifulSoup(c, features="lxml")
+                    title = soup.findAll("h2", {"class": "item-title"})
+
+                    keyword = search.split(" ")[2].lower()
+
+                    for i in range(len(title)):
+                        infoPage = title[i].a["href"]
+                        r = requests.get(infoPage)
+                        c = r.content
+                        soup = BeautifulSoup(c, features="lxml")
+                        para = soup.findAll("p")
+                        for p in para:
+                            if keyword in p.text.lower() and p.findChild() is None:
+                                print(p.text)
+                                text += p.text.replace(keyword, "`" + keyword + "`")\
+                                              .replace(keyword[0].upper() + keyword[1:], "`" + keyword + "`")\
+                                              .replace(keyword + "s", "`" + keyword + "`") + "\n\n"
+                                paraCount+=1
+                                if paraCount == numParas:
+                                    answered = True
+                                    break
+                        if answered:
+                            await bot.chat.send(channel, "*Information on " + keyword + ":* " + text)
+                            break
+
 
 
 listen_options = {
