@@ -37,10 +37,13 @@ class Handler:
             msg_id = event.msg.id
 
             if "!helpmemydude" in msg:
-                await bot.chat.send(channel, "*Here are some commands you can use:* \n `!sendmeme` to send a meme \n " +
-                "`!quizme` to quiz yourself about security and privacy \n `!ask` to ask a question about security \n " +
-                "`"
-                "`!virusgame` to learn more about viruses and cybersecurity :slightly_smiling_face: ")
+                await bot.chat.send(channel, "*Here are some commands you can use:* \n"+ 
+                "`!sendmeme <subreddit> <keyword>` to send a meme \n " +
+                "`!quizme` to quiz yourself about security and privacy \n " + 
+                "`!ask <question>` to ask a question about security \n " +
+                "`!findme <google or reddit>` to learn more about your public profile!" + 
+                "`!termsAndService <company>` to learn more about the conditions and privacy policies " + 
+                                "of many popular internet companies :slightly_smiling_face: ")
 
             #meme function
             elif "!sendmeme" in msg:
@@ -139,7 +142,8 @@ class Handler:
                         if answered:
                             await bot.chat.send(channel, "*Information on " + keyword + ":* " + text)
                             break
-
+            
+            #find on internet
             elif '!findme' in msg:
                 self.findMe = True
                 self.company = msg.split(" ")[1]
