@@ -26,7 +26,6 @@ logging.basicConfig(level=logging.DEBUG)
 asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
-companies = []
 
 class Handler:
     isQuiz = False
