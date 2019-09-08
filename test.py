@@ -16,6 +16,8 @@ import json
 import random
 from bs4 import BeautifulSoup
 from quiz_data import *
+from getFromGoogle import *
+from getFromReddit import *
 
 from pykeybasebot import Bot
 from pykeybasebot.types import chat1
@@ -27,10 +29,12 @@ temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
 companies = []
 
 class Handler:
+    isQuiz = False
     async def __call__(self, bot, event):
         if event.msg.sender.username != bot.username:
             channel = event.msg.channel
             msg = event.msg.content.text.body
+            msg_id = event.msg.id
 
             if "!helpmemydude" in msg:
                 await bot.chat.send(channel, "*Here are some commands you can use:* \n `!sendmeme` to send a meme \n " +
@@ -87,6 +91,7 @@ class Handler:
                 else:
                     self.quizScore += 1
                     await bot.chat.send(channel, "You got it my dude!")
+                    await bot.chat.react(channel, msg_id, ":+1:")
 
                 self.quizIndex += 1
 
@@ -135,24 +140,26 @@ class Handler:
                             await bot.chat.send(channel, "*Information on " + keyword + ":* " + text)
                             break
 
-
-
             elif '!findme' in msg:
                 self.findMe = True
-                await bot.chat.send(channel, "What would you like to find about yourself? \nPut in a few key words with spaces in between and the company at the end")
+                self.company = msg.split(" ")[1]
+                await bot.chat.send(channel, "What would you like to find about yourself? \nPut in a few key words with spaces in between")
 
             elif self.findMe:
-                words = msg.split(' ')
-                # TODO: Only process following code after the user sends a message
-                company = words[-1]
-                keywords = words[:-1]
-
                 await bot.chat.send(channel, "one moment ...")
-                if not company.lower() in companies:
-                    await bot.chat.send(channel, "try again")
+                keyword = msg.split(" ")
+                urlList = []
+                if self.company == "google":
+                    urlList = list(gSearch(keyword, 2))
+                elif self.company == "reddit":
+                    urlList = list(rSearch(keyword, 2))
+
+                if len(urlList) > 0:
+                    for i in range(len(urlList)):
+                        await bot.chat.send(channel, "*Here are some useful links that the public knows about you:* \n\n" + urlList[i])
                 else:
-                    #do smth
-                    await bot.chat.send(channel, "one moment ...")
+                    await bot.chat.send(channel, "Sorry, we didn't find anything about you :confused:")
+                self.findMe = False
 
 
 listen_options = {
