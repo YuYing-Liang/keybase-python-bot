@@ -1,5 +1,8 @@
 # keybase-python-bot
-Inspiration
+
+Do you want a friendly and fun way to learn about privacy? Do you want to be able to keep track of what the internet has on you? How about all while memeing and playing chess? MyDude's got ya!
+
+*Inspiration*
 What inspired us to pursue the dream of MyDude was an urgent feeling that the general public was critically unaware of very key important concepts about privacy. We felt that privacy, as a human right, should be something whose concepts are known to everyone.
 
 What it does
