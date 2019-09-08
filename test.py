@@ -15,6 +15,7 @@ import os
 import json
 import random
 from bs4 import BeautifulSoup
+from itertools import combinations
 from quiz_data import *
 from getFromGoogle import *
 from getFromReddit import *
@@ -29,6 +30,8 @@ temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
 
 class Handler:
     isQuiz = False
+    findMe = False
+    companies = ["amazon", "duckduckgo", "github", "youtube"]
     async def __call__(self, bot, event):
         if event.msg.sender.username != bot.username:
             channel = event.msg.channel
@@ -36,13 +39,16 @@ class Handler:
             msg_id = event.msg.id
 
             if "!helpmemydude" in msg:
+                compStr = ''
+                for i in self.companies:
+                    compStr += "\n>" + i
                 await bot.chat.send(channel, "*Here are some commands you can use:* \n"+ 
                 "`!sendmeme <subreddit> <keyword>` to send a meme \n " +
                 "`!quizme` to quiz yourself about security and privacy \n " + 
                 "`!ask <question>` to ask a question about security \n " +
                 "`!findme <google or reddit>` to learn more about your public profile!" + 
                 "`!evaluate <company>` to learn more about the conditions and privacy policies " + 
-                                "of many popular internet companies :slightly_smiling_face: ")
+                                "of many popular internet companies " + compStr + " :slightly_smiling_face: ")
 
             #meme function
             elif "!sendmeme" in msg:
@@ -168,20 +174,20 @@ class Handler:
                 terms_list = []
                 goodbad_list = []
 
-                keyword = msg.split(" ")
+                keyword = msg.split(" ").lower()
                 keyword.remove("!evaluate")
-                companies = ["amazon", "duckduckgo", "github", "youtube"]
                 companies_json = ["json/amazon.json", "json/duckduckgo.json", "json/github.json", "json/youtube.json"]
                 for i in range(4):
-                    if keyword[0] == companies[i]:
+                    if keyword[0] == self.companies[i]:
                         company_json = companies_json[i]
-                with open(company_json, 'r') as json_file:
-                    data = json_file.read()
-                    tosdr = json.loads(data)
-                    points = tosdr["points"]
-                    for point in points:
-                        terms_list += [tosdr["pointsData"][point]["title"]]
-                        goodbad_list += [tosdr["pointsData"][point]["tosdr"]["point"]]
+                        with open(company_json, 'r', encoding='utf-8') as json_file:
+                            data = json_file.read()
+                            tosdr = json.loads(data)
+                            points = tosdr["points"]
+                            for point in points:
+                                terms_list += [tosdr["pointsData"][point]["title"]]
+                                goodbad_list += [tosdr["pointsData"][point]["tosdr"]["point"]]
+                        break
 
                 emoji_list = [None] * len(goodbad_list)
                 for x in range(len(goodbad_list)):
@@ -204,6 +210,7 @@ class Handler:
                     elif goodbad_list[y] == "neutral":
                         neutralctr += 1
 
+                await bot.chat.send(channel, "*Terms and Service TL;DR*")
                 for j in range(len(terms_list)):
                     await bot.chat.send(channel, str((j + 1)) + ". " + emoji_list[j]+ " " + terms_list[j])
 
