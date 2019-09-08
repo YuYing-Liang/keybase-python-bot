@@ -27,6 +27,7 @@ isQuiz = False
 quizQCount = 0
 quizQuestions = []
 temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
+companies = []
 
 class Handler:
     async def __call__(self, bot, event):
@@ -115,20 +116,21 @@ class Handler:
 
 
             elif '!findme' in msg:
-                entered = False
-                input("What would you like to find about yourself? \nPut in a few key words with spaces in between and the company at the end")
+                self.findMe = True
+                await bot.chat.send(channel, "What would you like to find about yourself? \nPut in a few key words with spaces in between and the company at the end")
 
-                words = event.msg.content.text.body.split(' ')
+            elif self.findMe:
+                words = msg.split(' ')
                 # TODO: Only process following code after the user sends a message
-                company = words [-1]
+                company = words[-1]
                 keywords = words[:-1]
 
-                if !company.lower() in companies:
+                await bot.chat.send(channel, "one moment ...")
+                if not company.lower() in companies:
                     await bot.chat.send(channel, "try again")
                 else:
-                    scrape(company)
-
-
+                    #do smth
+                    await bot.chat.send(channel, "one moment ...")
 
 
 listen_options = {
