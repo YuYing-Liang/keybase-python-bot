@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4e224637-b37f-4f33-92cf-200dc755c39e" name="Default Changelist" comment="" />
+    <list default="true" id="4e224637-b37f-4f33-92cf-200dc755c39e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +39,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.getFromReddit">
+  <component name="RunManager" selected="Python.aiGameRunner">
+    <configuration name="aiGameRunner" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="keybase-python-bot" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/aiGameRunner.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="getFromGoogle" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="keybase-python-bot" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,6 +130,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.aiGameRunner" />
         <item itemvalue="Python.getFromReddit" />
         <item itemvalue="Python.getFromGoogle" />
         <item itemvalue="Python.test" />
@@ -123,7 +148,8 @@
       <option name="presentableId" value="Default" />
       <updated>1567882545842</updated>
       <workItem from="1567882565121" duration="5849000" />
-      <workItem from="1567888864229" duration="11785000" />
+      <workItem from="1567888864229" duration="14504000" />
+      <workItem from="1567912850515" duration="3702000" />
     </task>
     <servers />
   </component>
@@ -145,7 +171,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/keybase_python_bot$test.coverage" NAME="test Coverage Results" MODIFIED="1567884467799" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/keybase_python_bot$getFromReddit.coverage" NAME="getFromReddit Coverage Results" MODIFIED="1567907563166" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/keybase_python_bot$getFromReddit.coverage" NAME="getFromReddit Coverage Results" MODIFIED="1567907949622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/keybase_python_bot$getFromGoogle.coverage" NAME="getFromGoogle Coverage Results" MODIFIED="1567904614021" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/keybase_python_bot$aiGameRunner.coverage" NAME="aiGameRunner Coverage Results" MODIFIED="1567918485336" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
