@@ -26,12 +26,12 @@ from pykeybasebot.types import chat1
 logging.basicConfig(level=logging.DEBUG)
 asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
-temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
-
 class Handler:
     isQuiz = False
     findMe = False
     companies = ["amazon", "duckduckgo", "github", "youtube"]
+    temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
+
     async def __call__(self, bot, event):
         if event.msg.sender.username != bot.username:
             channel = event.msg.channel
@@ -39,14 +39,14 @@ class Handler:
             msg_id = event.msg.id
 
             if "!helpmemydude" in msg:
-                compStr = ''
+                compStr = ""
                 for i in self.companies:
                     compStr += "\n>" + i
                 await bot.chat.send(channel, "*Here are some commands you can use:* \n"+ 
                 "`!sendmeme <subreddit> <keyword>` to send a meme \n " +
                 "`!quizme` to quiz yourself about security and privacy \n " + 
                 "`!ask <question>` to ask a question about security \n " +
-                "`!findme <google or reddit>` to learn more about your public profile!" + 
+                "`!findme <google or reddit>` to learn more about your public profile! \n" + 
                 "`!evaluate <company>` to learn more about the conditions and privacy policies " + 
                                 "of many popular internet companies " + compStr + " :slightly_smiling_face: ")
 
@@ -64,10 +64,17 @@ class Handler:
                     if url.endswith('.jpg') or url.endswith('.png'):
                         print('Sending picture ' + child["title"] + ' from ' + url)
                         r = requests.get(url)
-                        with open(temp_pic, 'wb') as f:
+                        with open(self.temp_pic, 'wb') as f:
                             f.write(r.content)
-                        await bot.chat.attach(channel, temp_pic, "meme")
-                        os.remove(temp_pic)
+                        print(self.temp_pic)
+                        await bot.chat.attach(channel, self.temp_pic, "meme")
+                        os.remove(self.temp_pic)
+                    else:
+                        await bot.chat.send(channel, "sorry, no meme")
+                else:
+                    await bot.chat.send(channel, "sorry, no meme")
+                
+
 
             #quiz function
             elif msg == "!quizme":
@@ -87,14 +94,20 @@ class Handler:
                 await bot.chat.send(channel, self.quizQuestions[self.quizIndex][0])
                 await bot.chat.send(channel, "Type your answer: ")
 
+            elif '!endQuiz' in msg:
+                self.isQuiz = False
+                await bot.chat.send(channel, "Thanks for playing!")
+
             elif self.isQuiz:
                 answer = msg.lower()
                 ans_bool = False
+                print(self.quizQuestions[self.quizIndex][1])
                 for ans in self.quizQuestions[self.quizIndex][1]:
-                    if answer == ans:
+                    if ans == answer:
                         ans_bool = True
                 if ans_bool == False:
                     await bot.chat.send(channel, "You got it wrong my dude")
+                    await bot.chat.react(channel, msg_id, ":-1:")
                     await bot.chat.send(channel, self.quizQuestions[self.quizIndex][2])
                 else:
                     self.quizScore += 1
@@ -115,7 +128,7 @@ class Handler:
             elif "!ask" in msg:
                 answered = False
                 text = ""
-                numParas = 3
+                numParas = 2
                 paraCount = 0
                 words = msg.split(" ")
                 if words[0] == "!ask":
@@ -127,7 +140,7 @@ class Handler:
                     title = soup.findAll("h2", {"class": "item-title"})
 
                     keyword = search.split(" ")[2].lower()
-
+                    print(keyword)
                     for i in range(len(title)):
                         infoPage = title[i].a["href"]
                         r = requests.get(infoPage)
@@ -174,11 +187,10 @@ class Handler:
                 terms_list = []
                 goodbad_list = []
 
-                keyword = msg.split(" ").lower()
-                keyword.remove("!evaluate")
+                keyword = msg.split(" ")[1].lower()
                 companies_json = ["json/amazon.json", "json/duckduckgo.json", "json/github.json", "json/youtube.json"]
                 for i in range(4):
-                    if keyword[0] == self.companies[i]:
+                    if keyword == self.companies[i]:
                         company_json = companies_json[i]
                         with open(company_json, 'r', encoding='utf-8') as json_file:
                             data = json_file.read()
