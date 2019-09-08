@@ -1,8 +1,6 @@
 from itertools import combinations
-from urllib.parse import urlencode, urlparse, parse_qs
-
-#from lxml.html import fromstring
 from requests import *
+from bs4 import BeautifulSoup
 
 def gSearch(SearchTerms, noComb):
     """
@@ -22,19 +20,22 @@ def gSearch(SearchTerms, noComb):
     urlList = []
 
     for sPhrase in searchList:
-        r = get("https://www.google.com/search?q={}".format(sPhrase)).text
-        while 1:
-            linkIndex = r.find("<a href=")
-
-            if linkIndex == -1:
-                break
-
-            linkEnd = r.find('>', linkIndex+8)
-
-            link = r[linkIndex+9:linkEnd-1]
-            if link.find("/url?q=") == 0:
-                link = link[7:]
-            if link.find("https://") == 0:
-                urlList += [link]
-            r = r[:linkIndex] + r[linkEnd + 1:]
+        r = get("https://www.google.com/search?q={}".format(sPhrase)).content
+        s = BeautifulSoup(r, 'lxml')
+        s.prettify()
+        links = s.find_all("a")
+        for link in links:
+            pureLink = link.attrs['href']
+            if pureLink[:7] == "/url?q=":
+                pureLink = pureLink[7:]
+            if pureLink[:8] == "https://" or pureLink[:7] == "http://":
+                keywords = sPhrase.split(" AND ")
+                inText = 1
+                for word in keywords:
+                    if inText == 0:
+                        break
+                    if word not in link.text:
+                        inText = 0
+                if inText == 1:
+                    urlList += [pureLink]
     return(urlList)
