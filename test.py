@@ -23,9 +23,6 @@ from pykeybasebot.types import chat1
 logging.basicConfig(level=logging.DEBUG)
 asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
-isQuiz = False
-quizQCount = 0
-quizQuestions = []
 temp_pic = '/Users/histo/Documents/Github/keybase-python-bot/tmp.jpg'
 companies = []
 
@@ -45,7 +42,6 @@ class Handler:
             elif "!sendmeme" in msg:
                 keyword = msg.split(" ")
                 headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
-                #"https://www.reddit.com/r/" + keyword[1]+ "/search.json?q=" + keyword[2] + "&restrict_sr=1"
                 r = requests.get("https://www.reddit.com/r/{}/search.json?q={}&restrict_sr=1".format(keyword[1], keyword[2]), headers = headers)
                 jsonBody = json.loads(r.text)
                 children = jsonBody["data"]["children"]
@@ -63,18 +59,44 @@ class Handler:
 
             #quiz function
             elif msg == "!quizme":
-                quizQCount = 1
-                isQuiz = True
-                quizQuestions = list(questions)
-                #mix questions
+                self.isQuiz = True
+                self.quizIndex = 0
+                self.quizScore = 0
+                self.quizQuestions = list(questions)
+                await bot.chat.send(channel, "Let's test your cyber-security knowledge! Please answer all questions with no caps. Good Luck!")
+                #shuffle questions
                 for i in range(100):
-                    randint1 = random.randint(0,len(quizQuestions) - 1)
-                    randint2 = random.randint(0,len(quizQuestions) - 1)
-                    temp = quizQuestions[randint1]
-                    quizQuestions[randint1] = quizQuestions[randint2]
-                    quizQuestions[randint2] = temp
+                    randint1 = random.randint(0,len(self.quizQuestions)-1)
+                    randint2 = random.randint(0,len(self.quizQuestions)-1)
+                    temp = self.quizQuestions[randint1]
+                    self.quizQuestions[randint1] = self.quizQuestions[randint2]
+                    self.quizQuestions[randint2] = temp
+                
+                await bot.chat.send(channel, self.quizQuestions[self.quizIndex][0])
+                await bot.chat.send(channel, "Type your answer: ")
 
-                print(questions[quizQCount])
+            elif self.isQuiz:
+                answer = msg.lower()
+                ans_bool = False
+                for ans in self.quizQuestions[self.quizIndex][1]:
+                    if answer == ans:
+                        ans_bool = True
+                if ans_bool == False:
+                    await bot.chat.send(channel, "You got it wrong my dude")
+                    await bot.chat.send(channel, self.quizQuestions[self.quizIndex][2])
+                else:
+                    self.quizScore += 1
+                    await bot.chat.send(channel, "You got it my dude!")
+
+                self.quizIndex += 1
+
+                if self.quizIndex == len(self.quizQuestions):
+                    await bot.chat.send(channel, event.msg.sender.username + " hello my dude, you got a score of " + str(self.quizScore) + " out of " + str(len(self.quizQuestions)))
+                    self.quizQuestions = []
+                    self.quizIndex = 0
+                    self.quizScore = 0
+                else:
+                    await bot.chat.send(channel, self.quizQuestions[self.quizIndex][0])
 
             #answers security questions
             elif "!ask" in msg:
